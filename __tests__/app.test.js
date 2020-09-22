@@ -51,6 +51,33 @@ describe('recipe-lab routes', () => {
       });
   });
 
+  it('gets a recipe by id', async() => {
+    const recipe = await Recipe.insert({
+      name: 'bad cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+    });
+
+    return request(app)
+      .get(`/api/v1/recipes/${recipe.id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          id: expect.any(String),
+          name: 'bad cookies',
+          directions: [
+            'preheat oven to 375',
+            'mix ingredients',
+            'put dough on cookie sheet',
+            'bake for 10 minutes'
+          ]
+        });
+      });
+  });
+
   it('updates a recipe by id', async() => {
     const recipe = await Recipe.insert({
       name: 'cookies',
@@ -77,6 +104,33 @@ describe('recipe-lab routes', () => {
         expect(res.body).toEqual({
           id: expect.any(String),
           name: 'good cookies',
+          directions: [
+            'preheat oven to 375',
+            'mix ingredients',
+            'put dough on cookie sheet',
+            'bake for 10 minutes'
+          ]
+        });
+      });
+  });
+
+  it('deletes a recipe by id', async() => {
+    const recipe = await Recipe.insert({
+      name: 'blah cookies',
+      directions: [
+        'preheat oven to 375',
+        'mix ingredients',
+        'put dough on cookie sheet',
+        'bake for 10 minutes'
+      ],
+    });
+
+    return request(app)
+      .delete(`/api/v1/recipes/${recipe.id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          id: expect.any(String),
+          name: 'blah cookies',
           directions: [
             'preheat oven to 375',
             'mix ingredients',
